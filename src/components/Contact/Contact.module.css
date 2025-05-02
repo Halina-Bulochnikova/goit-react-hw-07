@@ -35,6 +35,7 @@ flex-direction: column;
   display: flex;
   text-align: center;
   gap: 12px;
+  align-items: center;
 }
 
 .deleteButton {

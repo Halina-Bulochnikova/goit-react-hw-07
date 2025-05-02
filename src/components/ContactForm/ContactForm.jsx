@@ -1,31 +1,31 @@
 import * as Yup from "yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import css from "./ContactForm.module.css";
-import { nanoid } from "nanoid";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { addContact } from "../../redux/contactsSlice";
+import { addContact } from "../../redux/contactsOps";
+import { selectContacts } from "../../redux/contactsSlice";
 
 const ContactForm = () => {
-  const contacts = useSelector((state) => state.contacts.items);
+  const contacts = useSelector(selectContacts);
   console.log("Contacts in state:", contacts);
 
   const dispatch = useDispatch();
 
   const handleSubmit = (values, options) => {
-    const newContact = {
-      id: nanoid(),
-      name: values.name,
-      number: values.number,
-    };
     const isDuplicate = contacts.some(
-      (contact) => contact.name.toLowerCase() === newContact.name.toLowerCase()
+      (contact) => contact.name.toLowerCase() === values.name.toLowerCase()
     );
 
     if (isDuplicate) {
-      alert(`${newContact.name} is already in contacts.`);
+      alert(`${values.name} вже існує в списку.`);
     } else {
-      dispatch(addContact(newContact));
+      dispatch(
+        addContact({
+          name: values.name,
+          number: values.number,
+        })
+      );
       options.resetForm();
     }
   };
